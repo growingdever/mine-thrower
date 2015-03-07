@@ -15,7 +15,7 @@ enum {
 int ground[MAP_HEIGHT][MAP_WIDTH];
 
 
-int counting_border(int x, y) {
+int counting_border(int x, int y) {
 	int count = 0;
 	for( int i = y - 1; i <= y + 1; i ++ ) {
 		if( i < 0 || i >= MAP_HEIGHT ) {
@@ -73,7 +73,17 @@ void generate_map() {
 
 	for( int i = 0; i < MAP_HEIGHT; i ++ ) {
 		for( int j = 0; j < MAP_WIDTH; j ++ ) {
-			printf("%3d",  ground[i][j]);
+			if( ground[i][j] == Mine ) {
+				c_printf("[r]%s", "<*>");
+			} else if( ground[i][j] > 0 ) {
+				char str[16];
+				sprintf(str, "<%d>", ground[i][j]);
+				c_printf("[b]%s", str);
+			} else {
+				char str[16];
+				sprintf(str, "<%d>", ground[i][j]);
+				c_printf("[n]%s", str);
+			}
 		}
 		printf("\n");
 	}
@@ -81,16 +91,7 @@ void generate_map() {
 
 int main(int argc, char const *argv[])
 {
-	// c_printf(" * [r]%s\n", "Red");
-	// c_printf(" * [g]%s\n", "Green");
-	// c_printf(" * [y]%s\n", "Yellow");
-	// c_printf(" * [b]%s\n", "Blue");
-	// c_printf(" * [m]%s\n", "Magenta");
-	// c_printf(" * [c]%s\n", "Cyan");
-	// c_printf(" * [n]%s\n", "Normal");
-
 	generate_map();
-
 
 	return 0;
 }
