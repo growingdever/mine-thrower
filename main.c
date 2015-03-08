@@ -79,7 +79,19 @@ void generate_map() {
 }
 
 void print_ground() {
+	// border
+	for( int i = 0; i <= (MAP_WIDTH) * 3 + 1; i ++ ) {
+		if( i == 0 || i == (MAP_WIDTH) * 3 + 1 ) {
+			c_printf("[g]%s", "+");
+		} else {
+			c_printf("[g]%s", "-");
+		}
+	}
+	printf("\n");
+
 	for( int i = 0; i < MAP_HEIGHT; i ++ ) {
+		// border
+		c_printf("[g]%s", "|");
 		for( int j = 0; j < MAP_WIDTH; j ++ ) {
 			char str[32], str2[32];
 			if( ! flipped[i][j] ) {
@@ -121,7 +133,17 @@ void print_ground() {
 				c_printf("[y]%s", ">");
 			}
 		}
-		printf("\n");
+		// border
+		c_printf("[g]%s\n", "|");
+	}
+
+	// border
+	for( int i = 0; i <= (MAP_WIDTH) * 3 + 1; i ++ ) {
+		if( i == 0 || i == (MAP_WIDTH) * 3 + 1 ) {
+			c_printf("[g]%s", "+");
+		} else {
+			c_printf("[g]%s", "-");
+		}
 	}
 }
 
