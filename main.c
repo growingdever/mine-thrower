@@ -70,7 +70,9 @@ void generate_map() {
 			ground[i][j] = counting_border(j, i);
 		}
 	}
+}
 
+void print_ground() {
 	for( int i = 0; i < MAP_HEIGHT; i ++ ) {
 		for( int j = 0; j < MAP_WIDTH; j ++ ) {
 			if( ground[i][j] == Mine ) {
@@ -92,6 +94,11 @@ void generate_map() {
 int main(int argc, char const *argv[])
 {
 	generate_map();
+
+	while(1) {
+		system("clear");
+		print_ground();
+	}
 
 	return 0;
 }
