@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <time.h>
 #include "lib/c_printf/c_printf.h"
@@ -7,6 +8,7 @@
 #define MAP_WIDTH 20
 #define MAP_HEIGHT 20
 #define NUM_OF_TOTAL_MINE 30
+
 
 enum {
 	Mine = -1,
@@ -122,7 +124,7 @@ void process_moving_cursor(char c) {
 		current_cursor_x -= 1;
 		break;
 	// right
-	case 'l':
+	case 'k':
 		current_cursor_x += 1;
 		break;
 	}
@@ -141,7 +143,7 @@ void process_moving_cursor(char c) {
 }
 
 void process_command() {
-	char c = getchar();
+	char c = mygetch();
 	if( c == '\n' || c == '\r' ) {
 		return;
 	}

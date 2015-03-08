@@ -7,6 +7,7 @@
 double Random0to1();
 double RandomRangeDouble(double start, double end);
 int RandomRangeInt(int start, int end);
+int mygetch();
 
 
 #endif
