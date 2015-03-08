@@ -81,32 +81,52 @@ void generate_map() {
 void print_ground() {
 	for( int i = 0; i < MAP_HEIGHT; i ++ ) {
 		for( int j = 0; j < MAP_WIDTH; j ++ ) {
+			char str[32], str2[32];
 			if( ! flipped[i][j] ) {
-				char str[16];
 				if( i == current_cursor_y && j == current_cursor_x ) {
-					strcpy(str, "<->");
+					c_printf("[y]%s", "<");
+					strcpy(str, "-");
 				} else {
 					strcpy(str, " - ");
 				}
 				
 				c_printf("[n]%s", str);
+
+				if( i == current_cursor_y && j == current_cursor_x ) {
+					c_printf("[y]%s", ">");
+				}
 				continue;
 			}
 
-			if( ground[i][j] == Mine ) {
-				c_printf("[r]%s", " * ");
-			} else if( ground[i][j] > 0 ) {
-				char str[16];
-				sprintf(str, " %d ", ground[i][j]);
-				c_printf("[b]%s", str);
+			strcpy(str, "");
+			if( i == current_cursor_y && j == current_cursor_x ) {
+				c_printf("[y]%s", "<");
+				strcpy(str, "%c");
 			} else {
-				char str[16];
-				sprintf(str, " %d ", ground[i][j]);
-				c_printf("[n]%s", str);
+				strcpy(str, " %c ");
+			}
+
+			if( ground[i][j] == Mine ) {
+				sprintf(str2, str, '*');
+				c_printf("[r]%s", str2);
+			} else if( ground[i][j] > 0 ) {
+				sprintf(str2, str, ground[i][j] + '0');
+				c_printf("[b]%s", str2);
+			} else {
+				sprintf(str2, str, ' ');
+				c_printf("[n]%s", str2);
+			}
+
+			if( i == current_cursor_y && j == current_cursor_x ) {
+				c_printf("[y]%s", ">");
 			}
 		}
 		printf("\n");
 	}
+}
+
+void flip_current_cursor() {
+	flipped[current_cursor_y][current_cursor_x] = 1;
 }
 
 void process_moving_cursor(char c) {
@@ -155,6 +175,10 @@ void process_command() {
 
 	if( c == 'i' || c == 'j' || c == 'h' || c == 'k' ) {
 		process_moving_cursor(c);
+	}
+
+	if( c == ' ' ) {
+		flip_current_cursor();
 	}
 }
 
