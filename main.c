@@ -13,6 +13,9 @@ enum {
 } MAP_SYMBOL;
 
 int ground[MAP_HEIGHT][MAP_WIDTH];
+int flipped[MAP_HEIGHT][MAP_WIDTH];
+int current_cursor_x = 0;
+int current_cursor_y = 0;
 
 
 int counting_border(int x, int y) {
@@ -46,6 +49,7 @@ void generate_map() {
 	for( int i = 0; i < MAP_HEIGHT; i ++ ) {
 		for( int j = 0; j < MAP_WIDTH; j ++ ) {
 			ground[i][j] = 0;
+			flipped[i][j] = 0;
 		}
 	}
 
@@ -75,15 +79,27 @@ void generate_map() {
 void print_ground() {
 	for( int i = 0; i < MAP_HEIGHT; i ++ ) {
 		for( int j = 0; j < MAP_WIDTH; j ++ ) {
+			if( ! flipped[i][j] ) {
+				char str[16];
+				if( i == current_cursor_y && j == current_cursor_x ) {
+					strcpy(str, "<->");
+				} else {
+					strcpy(str, " - ");
+				}
+				
+				c_printf("[n]%s", str);
+				continue;
+			}
+
 			if( ground[i][j] == Mine ) {
-				c_printf("[r]%s", "<*>");
+				c_printf("[r]%s", " * ");
 			} else if( ground[i][j] > 0 ) {
 				char str[16];
-				sprintf(str, "<%d>", ground[i][j]);
+				sprintf(str, " %d ", ground[i][j]);
 				c_printf("[b]%s", str);
 			} else {
 				char str[16];
-				sprintf(str, "<%d>", ground[i][j]);
+				sprintf(str, " %d ", ground[i][j]);
 				c_printf("[n]%s", str);
 			}
 		}
@@ -91,13 +107,62 @@ void print_ground() {
 	}
 }
 
+void process_moving_cursor(char c) {
+	switch(c) {
+	// up
+	case 'i':
+		current_cursor_y -= 1;
+		break;
+	// down
+	case 'j':
+		current_cursor_y += 1;
+		break;
+	// left
+	case 'h':
+		current_cursor_x -= 1;
+		break;
+	// right
+	case 'l':
+		current_cursor_x += 1;
+		break;
+	}
+
+	// bound
+	if( current_cursor_x < 0 ) {
+		current_cursor_x = 0;
+	} else if( current_cursor_x >= MAP_WIDTH ) {
+		current_cursor_x = MAP_WIDTH - 1;
+	}
+	if( current_cursor_y < 0 ) {
+		current_cursor_y = 0;
+	} else if( current_cursor_y >= MAP_HEIGHT ) {
+		current_cursor_y = MAP_HEIGHT - 1;
+	}
+}
+
+void process_command() {
+	char c = getchar();
+	if( c == '\n' || c == '\r' ) {
+		return;
+	}
+
+	// lower case
+	if( c >= 'A' && c <= 'Z' ) {
+		c += 'a' - 'A';
+	}
+
+	if( c == 'i' || c == 'j' || c == 'h' || c == 'k' ) {
+		process_moving_cursor(c);
+	}
+}
+
 int main(int argc, char const *argv[])
 {
 	generate_map();
-
 	while(1) {
 		system("clear");
 		print_ground();
+		process_command();
 	}
 
 	return 0;
