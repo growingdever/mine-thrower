@@ -12,6 +12,7 @@
 
 enum {
 	Mine = -1,
+	Flag = -2,
 } MAP_SYMBOL;
 
 int ground[MAP_HEIGHT][MAP_WIDTH];
@@ -145,6 +146,11 @@ void print_ground() {
 			c_printf("[g]%s", "-");
 		}
 	}
+	printf("\n");
+}
+
+void print_help() {
+	c_printf("[c]%s\n", "\'i\' : up, \'j\' : down, \'h\' : left, \'k\' : right");
 }
 
 void flip_current_cursor() {
@@ -210,6 +216,7 @@ int main(int argc, char const *argv[])
 	while(1) {
 		system("clear");
 		print_ground();
+		print_help();
 		process_command();
 	}
 
